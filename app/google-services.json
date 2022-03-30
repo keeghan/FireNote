@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491704670887",
+    "project_id": "firenote-bf533",
+    "storage_bucket": "firenote-bf533.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491704670887:android:ff2624b562421d249c5982",
+        "android_client_info": {
+          "package_name": "com.keeghan.firenote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491704670887-9318jn64f16bbqknc1hdsrng715mgfkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWrw0mRk8uTodM_f8fPCoqF0A31wGm9Bg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491704670887-9318jn64f16bbqknc1hdsrng715mgfkc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
