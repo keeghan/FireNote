@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/_10sdp"
+    android:id="@+id/mainContainer"
     tools:context=".WritingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout

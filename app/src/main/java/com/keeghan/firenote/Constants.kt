@@ -2,6 +2,7 @@ package com.keeghan.firenote
 
 class Constants {
     companion object{
+
         const val COLOR_RED = "#880000"
         const val COLOR_BLUE = "#FF01579B"
         const val COLOR_ORANGE = "#FFE65100"
@@ -12,5 +13,10 @@ class Constants {
         const val COLOR_TRANSPARENT = "#00FFFFFF"
         const val NOTE_ID_PATTERN = "yyyyMMddHHmmssSS"
         const val NOTE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss SSSS a z"
+        const val NOTE_TIME_EDITED_PATTERN = "MMM dd"
+
+
+        const val INTENT_FLAG_ADD_NOTE = "MainActivity.IntentFlag.UpdateNote"
+        const val NOTE_CLICKED = "MainActivity.NOTE_CLICKED"
     }
 }
