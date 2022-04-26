@@ -30,7 +30,6 @@ class WritingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isNoteUpdate = intent.getBooleanExtra(Constants.INTENT_FLAG_ADD_NOTE, false)
-        //if updating setUIColor to that of the existing note
 
         database = Firebase.database
         binding = ActivityWritingBinding.inflate(layoutInflater)
@@ -132,8 +131,7 @@ class WritingActivity : AppCompatActivity() {
         finish()
     }
 
-    //Todo: update Note
-    //function to update the noteSentFrom MainActivity
+
     private fun updateNote() {
         val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
         val dateTime = ZonedDateTime.now(ZoneId.systemDefault()).format(

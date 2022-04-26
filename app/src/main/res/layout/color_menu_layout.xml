@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
@@ -18,91 +18,90 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <HorizontalScrollView
-        android:paddingBottom="@dimen/_30sdp"
-        android:contentDescription="@string/select_colors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_8sdp"
+        android:contentDescription="@string/select_colors"
+        android:paddingBottom="@dimen/_30sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menuTitle">
 
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <View
-                android:contentDescription="@string/red"
                 android:id="@+id/transparentBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/transparent_circle"
-               />
+                android:contentDescription="@string/red" />
 
             <View
-                android:contentDescription="@string/red"
                 android:id="@+id/redBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_RED" />
+                android:backgroundTint="@color/COLOR_RED"
+                android:contentDescription="@string/red" />
 
             <View
-                android:contentDescription="@string/blue"
                 android:id="@+id/blueBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_BLUE" />
+                android:backgroundTint="@color/COLOR_BLUE"
+                android:contentDescription="@string/blue" />
 
             <View
-                android:contentDescription="@string/orange"
                 android:id="@+id/orangeBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_ORANGE" />
+                android:backgroundTint="@color/COLOR_ORANGE"
+                android:contentDescription="@string/orange" />
 
 
             <View
-                android:contentDescription="@string/violet"
                 android:id="@+id/violetBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_VIOLET" />
+                android:backgroundTint="@color/COLOR_VIOLET"
+                android:contentDescription="@string/violet" />
 
             <View
-                android:contentDescription="@string/green"
                 android:id="@+id/greenBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_GREEN" />
+                android:backgroundTint="@color/COLOR_GREEN"
+                android:contentDescription="@string/green" />
 
             <View
-                android:contentDescription="@string/brown"
                 android:id="@+id/brownBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_BROWN" />
+                android:backgroundTint="@color/COLOR_BROWN"
+                android:contentDescription="@string/brown" />
 
             <View
-                android:contentDescription="@string/drakGrey"
                 android:id="@+id/darkGreyBtn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/COLOR_DARK_GREY" />
+                android:backgroundTint="@color/COLOR_DARK_GREY"
+                android:contentDescription="@string/darkGrey" />
         </LinearLayout>
     </HorizontalScrollView>
 
