@@ -26,6 +26,9 @@
     <string name="orange">Orange</string>
     <string name="swipeRemove">remove</string>
     <string name="note_delete">Undo note delete</string>
+    <string name="close">close</string>
+    <string name="pin">pin</string>
+    <string name="note_color">Note color</string>
 
 
 </resources>

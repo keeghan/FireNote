@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1425" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/color_circle.xml" value="0.2385" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/colordialog.xml" value="0.232" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.232" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/ic_baseline_delete_outline_24.xml" value="0.233" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/ic_color_lens.xml" value="0.135" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1425" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/note_transparent.xml" value="0.108" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/recycler_background.xml" value="0.1915" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/drawable/recycler_background_blue.xml" value="0.1915" />
@@ -20,10 +25,14 @@
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/activity_writing.xml" value="0.25" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/color_menu_layout.xml" value="0.3994439295644115" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/content_main.xml" value="0.18" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/fragment_color_picker.xml" value="0.25" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/fragment_first.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/note_item.xml" value="0.33" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/layout/snackbar_layout.xml" value="0.23125" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/menu/menu_long_click.xml" value="0.22864583333333333" />
         <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/menu/menu_main.xml" value="0.18385416666666668" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1425" />
+        <entry key="..\:/Users/KEEGHAN/AndroidStudioProjects/FireNote/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1425" />
       </map>
     </option>
   </component>

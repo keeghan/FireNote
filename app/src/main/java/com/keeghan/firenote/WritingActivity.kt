@@ -30,7 +30,6 @@ class WritingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isNoteUpdate = intent.getBooleanExtra(Constants.INTENT_FLAG_ADD_NOTE, false)
-
         database = Firebase.database
         binding = ActivityWritingBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -163,7 +162,6 @@ class WritingActivity : AppCompatActivity() {
         colorDialogBinding = ColorMenuLayoutBinding.inflate(layoutInflater, null, false)
         colorDialogBinding.mainContainer.setBackgroundColor(Color.parseColor(noteColor))
         dialog.setContentView(colorDialogBinding.root)
-
         dialog.show()
 
 

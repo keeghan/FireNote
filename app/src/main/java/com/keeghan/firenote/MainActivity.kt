@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -23,24 +25,30 @@ import com.keeghan.firenote.databinding.ActivityMainBinding
 import com.keeghan.firenote.model.Note
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-
-class MainActivity : AppCompatActivity(), NoteAdapter.OnItemClickListener {
+class MainActivity : AppCompatActivity(), NoteAdapter.OnItemClickListener,
+    NoteAdapter.OnItemLongClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var adapter: NoteAdapter
     private lateinit var noteList: ArrayList<Note>
+    private var actionMode: ActionMode? = null
+    private var longClickNote: Note? = null
+    private lateinit var colorDialogFragment: ColorPickerFragment
+    private lateinit var viewModel: MainViewModel
 
     override
     fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         database = Firebase.database
         noteList = ArrayList()
-        adapter = NoteAdapter(this)
+        adapter = NoteAdapter(this, this)
         val noteRef = database.reference.child("note")
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        colorDialogFragment = ColorPickerFragment.newInstance()
+
 
         //Reading notes for database in Arraylist To display in RecyclerView
         val eventListener: ValueEventListener = object : ValueEventListener {
@@ -59,14 +67,12 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemClickListener {
             val intent = Intent(applicationContext, WritingActivity::class.java)
             intent.putExtra(INTENT_FLAG_ADD_NOTE, false)
             startActivity(intent)
+            if (actionMode != null) {
+                closeActionMode()
+            }
         }
-
         attachItemTouchHelper()
     }
-
-//    private fun convertDate(date: Date): String {
-//        return SimpleDateFormat("MMMMddhh-ssSSS", Locale.getDefault()).format(date)
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -81,19 +87,7 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemClickListener {
         }
     }
 
-
-    //handles clicking of items
-    override fun onItemClick(position: Int) {
-        val note: Note = noteList[position]
-        val intent = Intent(applicationContext, WritingActivity::class.java).apply {
-            putExtra(INTENT_FLAG_ADD_NOTE, true)
-            putExtra(NOTE_CLICKED, note)
-        }
-        Toast.makeText(applicationContext, note.title, Toast.LENGTH_SHORT).show()
-        startActivity(intent)
-    }
-
-
+    //Method to add swipe to delete support
     private fun attachItemTouchHelper() {
         //Implementation of swiping to delete
         val itemTouchHelper = ItemTouchHelper(
@@ -183,7 +177,64 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemClickListener {
         binding.noteRecycler.adapter = adapter
         binding.noteRecycler.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        //  GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
         adapter.setNoteList(noteList)
+    }
+
+    //handles clicking and longClicking of Notes
+    override fun onItemClick(position: Int) {
+        val note: Note = noteList[position]
+        val intent = Intent(applicationContext, WritingActivity::class.java).apply {
+            putExtra(INTENT_FLAG_ADD_NOTE, true)
+            putExtra(NOTE_CLICKED, note)
+        }
+        Toast.makeText(applicationContext, note.title, Toast.LENGTH_SHORT).show()
+        startActivity(intent)
+        if (actionMode != null) {
+            closeActionMode()
+        }
+    }
+
+    override fun onItemLongClick(position: Int) {
+        longClickNote = noteList[position]
+        actionMode = startSupportActionMode(actionModeCallback)!!
+    }
+
+    //ActionMode Implementation
+    private val actionModeCallback = object : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            mode?.menuInflater?.inflate(R.menu.menu_long_click, menu)
+
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            return true
+        }
+
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            when (item?.itemId) {
+                R.id.action_pin -> mode?.finish()
+                R.id.action_choose_color -> {
+                    colorDialogFragment.show(supportFragmentManager, "customColorPicker")
+                }
+                R.id.action_more -> mode?.finish()
+                else -> {
+                    return false
+                }
+            }
+            return false
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            actionMode = null
+        }
+    } //end of ActionMode
+
+    fun updateNoteColor(color: String) {
+        viewModel.updateNote(longClickNote!!, color)
+    }
+
+    fun closeActionMode() {
+        actionMode?.finish()
     }
 }

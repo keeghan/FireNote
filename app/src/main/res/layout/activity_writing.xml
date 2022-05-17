@@ -10,7 +10,6 @@
     tools:context=".WritingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:id="@+id/TopContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -120,6 +119,4 @@
             app:layout_constraintTop_toTopOf="@+id/colorSelector" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

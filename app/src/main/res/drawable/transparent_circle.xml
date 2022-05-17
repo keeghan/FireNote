@@ -10,5 +10,5 @@
         android:width="@dimen/_10sdp"
         android:height="@dimen/_10sdp"/>
 
-    <stroke android:width="@dimen/_1sdp" android:color="#000000"/>
+    <stroke android:width="@dimen/_2sdp" android:color="#494949"/>
 </shape>
