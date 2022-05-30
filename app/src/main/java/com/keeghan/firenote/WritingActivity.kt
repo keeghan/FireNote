@@ -1,16 +1,14 @@
 package com.keeghan.firenote
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.keeghan.firenote.databinding.ActivityWritingBinding
 import com.keeghan.firenote.databinding.ColorMenuLayoutBinding
 import com.keeghan.firenote.model.Note
@@ -21,34 +19,58 @@ import java.time.format.DateTimeFormatter
 
 class WritingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWritingBinding
-    private lateinit var database: FirebaseDatabase
+
     private lateinit var dialog: BottomSheetDialog
     private lateinit var colorDialogBinding: ColorMenuLayoutBinding
     private var noteColor = Constants.COLOR_TRANSPARENT
     private var isNoteUpdate = false
+    private lateinit var viewModel: MainViewModel
+    private var pinStatus = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //handle if activity is created from clicking note
         isNoteUpdate = intent.getBooleanExtra(Constants.INTENT_FLAG_ADD_NOTE, false)
-        database = Firebase.database
         binding = ActivityWritingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.dateEdited.text = LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        binding.dateEdited.text =
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("'Edited' MMM-dd"))
 
         //change background of ui if it is updating activity
         if (isNoteUpdate) {
             val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
             noteColor = note.color
+            pinStatus = note.pinStatus
+            if (pinStatus) {
+                binding.pinBtn.setImageResource(R.drawable.ic_push_pin)
+            } else {
+                binding.pinBtn.setImageResource(R.drawable.ic_outline_push_pin_24)
+            }
             binding.mainContainer.setBackgroundColor(Color.parseColor(noteColor))
-            setToWhite()
+
+            if ((resources.configuration.uiMode and
+                        Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO
+            ) {
+                setUIColor(R.color.default_text_color)
+            } else {
+                setUIColor(R.color.white)
+            }
+        }
+
+        binding.pinBtn.setOnClickListener {
+            pinStatus = !pinStatus
+            if (pinStatus) {
+                binding.pinBtn.setImageResource(R.drawable.ic_push_pin)
+            } else {
+                binding.pinBtn.setImageResource(R.drawable.ic_outline_push_pin_24)
+            }
         }
 
         binding.backBtn.setOnClickListener {
             if (isNoteUpdate) {
                 updateNote()
-                Log.e("====================", "update note executed")
             } else {
-                Log.e("=====================", "sendNote executed")
                 sendNote()
             }
             finish()
@@ -61,6 +83,7 @@ class WritingActivity : AppCompatActivity() {
         if (isNoteUpdate) {
             setNoteContent()
         }
+
     }
 
     //setWritingActivity content
@@ -96,27 +119,9 @@ class WritingActivity : AppCompatActivity() {
             note.color = noteColor
             note.title = binding.noteTitle.text.toString()
             note.message = binding.noteMessage.text.toString()
-            note.pinStatus = false
-            //Convert ZoneDateTime as String
-            note.dateTimeString = ZonedDateTime.now(ZoneId.systemDefault()).format(
-                DateTimeFormatter.ofPattern(
-                    Constants.NOTE_TIME_PATTERN
-                )
-            )
-            //format ZoneDateTime as Id
-            note.id =
-                "note_" + ZonedDateTime.now(ZoneId.systemDefault()).format(
-                    DateTimeFormatter.ofPattern(
-                        Constants.NOTE_ID_PATTERN
-                    )
-                )
-            val myRef = database.getReference("note")
-            myRef.child(note.id).setValue(note).addOnSuccessListener {
-                Toast.makeText(applicationContext, "Note Saved", Toast.LENGTH_SHORT).show()
-            }
-                .addOnFailureListener {
-                    Toast.makeText(applicationContext, "Note not Saved", Toast.LENGTH_SHORT).show()
-                }
+            note.pinStatus = pinStatus
+
+            viewModel.saveNote(note)
         }
     }
 
@@ -131,8 +136,10 @@ class WritingActivity : AppCompatActivity() {
     }
 
 
+
     private fun updateNote() {
         val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
+
         val dateTime = ZonedDateTime.now(ZoneId.systemDefault()).format(
             DateTimeFormatter.ofPattern(
                 Constants.NOTE_TIME_PATTERN
@@ -144,16 +151,10 @@ class WritingActivity : AppCompatActivity() {
             "dateTimeString" to dateTime,
             "id" to note.id,
             "message" to binding.noteMessage.text.toString(),
-            "pinStatus" to false,
+            "pinStatus" to pinStatus,
             "title" to binding.noteTitle.text.toString()
         )
-
-        val myRef = database.getReference("note").child(note.id)
-        myRef.updateChildren(noteObject).addOnSuccessListener {
-            Toast.makeText(applicationContext, "Note Updated", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(applicationContext, it.message, Toast.LENGTH_SHORT).show()
-        }
+        viewModel.updateNote(note)
     }
 
 
@@ -168,7 +169,15 @@ class WritingActivity : AppCompatActivity() {
         //set onclickListener for all the button in the  bottomSheetDialog
         colorDialogBinding.transparentBtn.setOnClickListener {
             noteColor = Constants.COLOR_TRANSPARENT
-            changeNoteColor(noteColor)
+            binding.mainContainer.setBackgroundColor(Color.parseColor(noteColor))
+            colorDialogBinding.mainContainer.setBackgroundColor(Color.parseColor(noteColor))
+
+            if ((resources.configuration.uiMode and
+                        Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO
+            ) {
+                setUIColor(R.color.default_text_color)
+            }
+            dialog.dismissWithAnimation
         }
         colorDialogBinding.redBtn.setOnClickListener {
             noteColor = Constants.COLOR_RED
@@ -205,30 +214,30 @@ class WritingActivity : AppCompatActivity() {
         binding.mainContainer.setBackgroundColor(Color.parseColor(color))
         //   binding.mainContainer.setBackgroundColor(ContextCompat.getColor(applicationContext, color))
         colorDialogBinding.mainContainer.setBackgroundColor(Color.parseColor(color))
-        setToWhite()
+        setUIColor(R.color.white)
         dialog.dismissWithAnimation
     }
 
     //change all  icons and button elements to white after setting color
-    private fun setToWhite() {
+    private fun setUIColor(id: Int) {
         DrawableCompat.setTint(
             binding.backBtn.drawable,
-            ContextCompat.getColor(applicationContext, R.color.white)
+            ContextCompat.getColor(applicationContext, id)
         )
         DrawableCompat.setTint(
             binding.moreOptions.drawable,
-            ContextCompat.getColor(applicationContext, R.color.white)
+            ContextCompat.getColor(applicationContext, id)
         )
         DrawableCompat.setTint(
             binding.colorSelector.drawable,
-            ContextCompat.getColor(applicationContext, R.color.white)
+            ContextCompat.getColor(applicationContext, id)
         )
         DrawableCompat.setTint(
             binding.pinBtn.drawable,
-            ContextCompat.getColor(applicationContext, R.color.white)
+            ContextCompat.getColor(applicationContext, id)
         )
-        binding.dateEdited.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-        binding.noteTitle.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-        binding.noteMessage.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+        binding.dateEdited.setTextColor(ContextCompat.getColor(applicationContext, id))
+        binding.noteTitle.setTextColor(ContextCompat.getColor(applicationContext, id))
+        binding.noteMessage.setTextColor(ContextCompat.getColor(applicationContext, id))
     }
 }

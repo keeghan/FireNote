@@ -17,4 +17,6 @@
     <color name="COLOR_BROWN">#310c0c</color>
     <color name="COLOR_DARK_GREY">#4c4c4c</color>
 
+    <color name="default_text_color">#89000000</color>
+
 </resources>

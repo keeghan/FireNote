@@ -1,14 +1,18 @@
 package com.keeghan.firenote
 
+import android.content.Context
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.keeghan.firenote.databinding.NoteItemBinding
 import com.keeghan.firenote.model.Note
 
 
 class NoteAdapter(
+    private val context: Context,
     private val listener: OnItemClickListener,
     private val longClickListener: OnItemLongClickListener
 ) :
@@ -24,6 +28,23 @@ class NoteAdapter(
         init {
             binding.root.setOnClickListener(this)
             binding.root.setOnLongClickListener(this)
+        }
+
+        //Set note Font color to white in lightMode but transparent note to dark text
+        fun setFontColor(note: Note) {
+            val nightModeFlags: Int = context.resources.configuration.uiMode and
+                    Configuration.UI_MODE_NIGHT_MASK
+            if (nightModeFlags == Configuration.UI_MODE_NIGHT_NO) {
+                binding.noteBody.setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+            if (note.color == Constants.COLOR_TRANSPARENT && nightModeFlags == Configuration.UI_MODE_NIGHT_NO) {
+                binding.noteBody.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        androidx.media.R.color.secondary_text_default_material_light
+                    )
+                )
+            }
         }
 
         fun setNote(note: Note) {
@@ -62,6 +83,7 @@ class NoteAdapter(
         when (noteList[position].color) {
             Constants.COLOR_RED -> {
                 holder.itemView.setBackgroundResource(R.drawable.recycler_background_red)
+
             }
             Constants.COLOR_BLUE -> {
                 holder.itemView.setBackgroundResource(R.drawable.recycler_background_blue)
@@ -85,6 +107,9 @@ class NoteAdapter(
                 holder.itemView.setBackgroundResource(R.drawable.recycler_background_transparent)
             }
         }
+
+        holder.setFontColor(noteList[position])
+
     }
 
     fun setNoteList(noList: ArrayList<Note>) {
