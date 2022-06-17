@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayoutStates
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.ViewModelProvider
@@ -49,14 +50,21 @@ class WritingActivity : AppCompatActivity() {
             }
             binding.mainContainer.setBackgroundColor(Color.parseColor(noteColor))
 
+            //set ui color
             if ((resources.configuration.uiMode and
                         Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO
             ) {
-                setUIColor(R.color.default_text_color)
+                //lightMode ColoredNote
+                if (noteColor != Constants.COLOR_TRANSPARENT) {
+                    setUIColor(R.color.white)
+                } else { //lightMode TransparentNote
+                    setUIColor(R.color.default_text_color)
+                }
             } else {
                 setUIColor(R.color.white)
             }
         }
+
 
         binding.pinBtn.setOnClickListener {
             pinStatus = !pinStatus
@@ -136,24 +144,20 @@ class WritingActivity : AppCompatActivity() {
     }
 
 
-
     private fun updateNote() {
-        val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
-
         val dateTime = ZonedDateTime.now(ZoneId.systemDefault()).format(
             DateTimeFormatter.ofPattern(
                 Constants.NOTE_TIME_PATTERN
             )
         )
 
-        val noteObject = mapOf<String, Any>(
-            "color" to noteColor,
-            "dateTimeString" to dateTime,
-            "id" to note.id,
-            "message" to binding.noteMessage.text.toString(),
-            "pinStatus" to pinStatus,
-            "title" to binding.noteTitle.text.toString()
-        )
+        val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
+        note.color = noteColor
+        note.title = binding.noteTitle.text.toString()
+        note.message = binding.noteMessage.text.toString()
+        note.pinStatus = pinStatus
+        note.dateTimeString = dateTime
+
         viewModel.updateNote(note)
     }
 
@@ -212,7 +216,6 @@ class WritingActivity : AppCompatActivity() {
     //Method executed when a color is chosen
     private fun changeNoteColor(color: String) {
         binding.mainContainer.setBackgroundColor(Color.parseColor(color))
-        //   binding.mainContainer.setBackgroundColor(ContextCompat.getColor(applicationContext, color))
         colorDialogBinding.mainContainer.setBackgroundColor(Color.parseColor(color))
         setUIColor(R.color.white)
         dialog.dismissWithAnimation

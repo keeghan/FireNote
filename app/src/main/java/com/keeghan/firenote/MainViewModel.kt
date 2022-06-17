@@ -26,8 +26,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
 
+    //called by the writingActivity to update
     fun updateNote(newNote: Note) {
-
         val noteObject = mapOf<String, Any>(
             "color" to newNote.color,
             "dateTimeString" to newNote.dateTimeString,
@@ -40,6 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         myRef.updateChildren(noteObject)
     }
 
+    //called by the mainActivity to update color
     fun updateNote(newNote: Note, color: String) {
         val noteObject = mapOf<String, Any>(
             "color" to color,

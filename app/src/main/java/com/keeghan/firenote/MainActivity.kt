@@ -251,6 +251,9 @@ class MainActivity : AppCompatActivity() {
             binding.pinnedTitle.visibility = View.GONE
             binding.othersTitle.visibility = View.GONE
         }
+
+        //TODO: display message if there's no note
+
     }
 
 
