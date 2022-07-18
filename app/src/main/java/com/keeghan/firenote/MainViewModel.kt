@@ -9,7 +9,9 @@ import com.keeghan.firenote.model.Note
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
+//ViewModel to handle writing to the realtime database
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var database = Firebase.database
@@ -30,7 +32,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateNote(newNote: Note) {
         val noteObject = mapOf<String, Any>(
             "color" to newNote.color,
-            "dateTimeString" to newNote.dateTimeString,
+            "dateTimeString" to newNote.dateTimeString.uppercase(Locale.getDefault()),    //change dateTime to uppercase to avoid errors
             "id" to newNote.id,
             "message" to newNote.message,
             "pinStatus" to newNote.pinStatus,
@@ -44,13 +46,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateNote(newNote: Note, color: String) {
         val noteObject = mapOf<String, Any>(
             "color" to color,
-            "dateTimeString" to newNote.dateTimeString,
+            "dateTimeString" to newNote.dateTimeString.uppercase(Locale.getDefault()),
             "id" to newNote.id,
             "message" to newNote.message,
             "pinStatus" to newNote.pinStatus,
             "title" to newNote.title
         )
-        val myRef = database.getReference("note").child(newNote.id)
+         val myRef = database.getReference("note").child(newNote.id)
+       // val myRef = database.getReference("note")
         myRef.updateChildren(noteObject).addOnFailureListener {
             Toast.makeText(getApplication(), it.message, Toast.LENGTH_SHORT).show()
         }
@@ -63,7 +66,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             DateTimeFormatter.ofPattern(
                 Constants.NOTE_TIME_PATTERN
             )
-        )
+        ).uppercase(Locale.getDefault())
         //format ZoneDateTime as Id
         note.id =
             "note_" + ZonedDateTime.now(ZoneId.systemDefault()).format(

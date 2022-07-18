@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayoutStates
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.ViewModelProvider
@@ -23,10 +22,16 @@ class WritingActivity : AppCompatActivity() {
 
     private lateinit var dialog: BottomSheetDialog
     private lateinit var colorDialogBinding: ColorMenuLayoutBinding
+    private lateinit var viewModel: MainViewModel
     private var noteColor = Constants.COLOR_TRANSPARENT
     private var isNoteUpdate = false
-    private lateinit var viewModel: MainViewModel
     private var pinStatus = false
+
+    //variables to check if noteClicked was changed (to update Edited Time)
+    private var noteColorCheck = Constants.COLOR_TRANSPARENT
+    private var noteTitleCheck = ""
+    private var noteMessageCheck = ""
+    private var pinStatusCheck = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,14 @@ class WritingActivity : AppCompatActivity() {
             val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
             noteColor = note.color
             pinStatus = note.pinStatus
+
+            //set initial values for check
+            noteColorCheck = note.color
+            noteTitleCheck = note.title
+            noteMessageCheck = note.message
+            pinStatusCheck = note.pinStatus
+
+
             if (pinStatus) {
                 binding.pinBtn.setImageResource(R.drawable.ic_push_pin)
             } else {
@@ -91,7 +104,6 @@ class WritingActivity : AppCompatActivity() {
         if (isNoteUpdate) {
             setNoteContent()
         }
-
     }
 
     //setWritingActivity content
@@ -99,14 +111,15 @@ class WritingActivity : AppCompatActivity() {
         val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
         binding.noteMessage.setText(note.message)
         binding.noteTitle.setText(note.title)
-        binding.dateEdited.text
 
-        //convert database sting to zoneDateTime object and convert it back to text
+        //  convert database string to zoneDateTime object and convert it back to text
         val dateTime = ZonedDateTime.parse(
             note.dateTimeString, DateTimeFormatter.ofPattern(
                 Constants.NOTE_TIME_PATTERN
             )
         )
+
+        //   var dateTime = ZonedDateTime.now();
 
         val time = "Edited: " + dateTime.format(
             DateTimeFormatter.ofPattern(
@@ -145,22 +158,27 @@ class WritingActivity : AppCompatActivity() {
 
 
     private fun updateNote() {
-        val dateTime = ZonedDateTime.now(ZoneId.systemDefault()).format(
-            DateTimeFormatter.ofPattern(
-                Constants.NOTE_TIME_PATTERN
-            )
-        )
-
         val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
         note.color = noteColor
         note.title = binding.noteTitle.text.toString()
         note.message = binding.noteMessage.text.toString()
         note.pinStatus = pinStatus
-        note.dateTimeString = dateTime
 
+        val dateTime: String
+        if (noteColorCheck == note.color && noteMessageCheck == note.message
+            && noteTitleCheck == note.title && pinStatusCheck == note.pinStatus
+        ) {
+            //maintain date Time
+        } else {
+            dateTime = ZonedDateTime.now(ZoneId.systemDefault()).format(
+                DateTimeFormatter.ofPattern(
+                    Constants.NOTE_TIME_PATTERN
+                )
+            )
+            note.dateTimeString = dateTime
+        }
         viewModel.updateNote(note)
     }
-
 
     private fun showBottomSheetDialog() {
         dialog = BottomSheetDialog(this)

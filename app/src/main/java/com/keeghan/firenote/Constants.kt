@@ -13,6 +13,7 @@ class Constants {
         const val COLOR_TRANSPARENT = "#00FFFFFF"
         const val NOTE_ID_PATTERN = "yyyyMMddHHmmssSS"
         const val NOTE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss SSSS a z"
+     //   const val NOTE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss SSSS a z"
         const val NOTE_TIME_EDITED_PATTERN = "MMM dd"
 
 
