@@ -104,7 +104,7 @@ class WritingActivity : AppCompatActivity() {
         if (isNoteUpdate) {
             setNoteContent()
         }
-    }
+    }//End of onCreate
 
     //setWritingActivity content
     private fun setNoteContent() {
@@ -119,15 +119,33 @@ class WritingActivity : AppCompatActivity() {
             )
         )
 
-        //   var dateTime = ZonedDateTime.now();
 
-        val time = "Edited: " + dateTime.format(
-            DateTimeFormatter.ofPattern(
-                Constants.NOTE_TIME_EDITED_PATTERN
-            )
-        )
-        binding.dateEdited.text = time
+        //Check last time note was edited and format edited time
+        val timeNow = ZonedDateTime.now()
+        if (timeNow.isBefore(dateTime.plusDays(1))) {
+            displayTime(dateTime, Constants.EDITED_PATTERN_NOW)
+        }
+        //todo: solve problems
+        if (timeNow.isAfter(dateTime.plusDays(2))) {
+            displayTime(dateTime, Constants.EDITED_PATTERN_MONTH)
+        }
+        if (timeNow.isAfter(dateTime.plusMonths(1))) {
+            displayTime(dateTime, Constants.EDITED_PATTERN_MONTH)
+        }
+        if (timeNow.isAfter(dateTime.plusYears(1))) {
+            displayTime(dateTime, Constants.EDITED_PATTERN_YEAR)
+        }
     }
+
+
+    //display edited time
+    private fun displayTime(dateTime: ZonedDateTime, pattern: String) {
+        val editedTime = "Edited " + dateTime.format(
+            DateTimeFormatter.ofPattern(pattern)
+        )
+        binding.dateEdited.text = editedTime
+    }
+
 
     //validate Note, create note and upload a New Note to Realtime Database
     private fun sendNote() {
@@ -146,6 +164,9 @@ class WritingActivity : AppCompatActivity() {
         }
     }
 
+
+    //Inspect whether this is an update even
+    //or newNote send even save note
     override fun onBackPressed() {
         super.onBackPressed()
         if (isNoteUpdate) {
@@ -164,6 +185,8 @@ class WritingActivity : AppCompatActivity() {
         note.message = binding.noteMessage.text.toString()
         note.pinStatus = pinStatus
 
+        //Check if user made changes to the note to determine if
+        //note needs to be update or left alone
         val dateTime: String
         if (noteColorCheck == note.color && noteMessageCheck == note.message
             && noteTitleCheck == note.title && pinStatusCheck == note.pinStatus
