@@ -1,8 +1,11 @@
 package com.keeghan.firenote
 
 import android.app.Application
+import android.content.Intent
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.keeghan.firenote.model.Note
@@ -14,18 +17,12 @@ import java.util.*
 //ViewModel to handle writing to the realtime database
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
+    //fix get note here
     var database = Firebase.database
-    val noteRef = database.reference.child("note")
-
-//    class Factory(val app: Application) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-//                @Suppress("UNCHECKED_CAST")
-//                return MainViewModel(app) as T
-//            }
-//            throw IllegalArgumentException("Unable to construct ViewModel")
-//        }
-//    }
+    private val auth = FirebaseAuth.getInstance()
+    private val userId = auth.currentUser?.uid
+    val noteRef = database.reference.child(userId!!)
+    private val myRef = database.getReference(userId!!)
 
 
     //called by the writingActivity to update
@@ -38,8 +35,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             "pinStatus" to newNote.pinStatus,
             "title" to newNote.title
         )
-        val myRef = database.getReference("note").child(newNote.id)
-        myRef.updateChildren(noteObject)
+        myRef.child(newNote.id).updateChildren(noteObject)
     }
 
     //called by the mainActivity to update color
@@ -52,9 +48,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             "pinStatus" to newNote.pinStatus,
             "title" to newNote.title
         )
-         val myRef = database.getReference("note").child(newNote.id)
-       // val myRef = database.getReference("note")
-        myRef.updateChildren(noteObject).addOnFailureListener {
+        myRef.child(newNote.id).updateChildren(noteObject).addOnFailureListener {
             Toast.makeText(getApplication(), it.message, Toast.LENGTH_SHORT).show()
         }
     }
@@ -83,7 +77,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteNote(tempNote: Note) {
-        database.reference.child("note").child(tempNote.id).setValue(null)
+        database.reference.child(userId!!).child(tempNote.id).setValue(null)
     }
 
 }

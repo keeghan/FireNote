@@ -29,18 +29,24 @@
         android:testOnly="true"
         android:theme="@style/Theme.FireNote" >
         <activity
-            android:name="com.keeghan.firenote.WritingActivity"
+            android:name="com.keeghan.firenote.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name="com.keeghan.firenote.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.FireNote.NoActionBar" >
+            android:name="com.keeghan.firenote.SignInActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.keeghan.firenote.WritingActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.keeghan.firenote.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FireNote.NoActionBar" >
         </activity>
 
         <service
