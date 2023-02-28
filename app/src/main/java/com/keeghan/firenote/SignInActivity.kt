@@ -64,6 +64,13 @@ class SignInActivity : AppCompatActivity() {
                     }
             }
         }
+
+        binding.recoveryBtn.setOnClickListener {
+            val intent = Intent(this@SignInActivity, RestPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 
     private fun validateSignInForm(): Boolean {

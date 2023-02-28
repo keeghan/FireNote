@@ -16,8 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26999998"
-        >
+        app:layout_constraintVertical_bias="0.26999998">
 
         <TextView
             android:id="@+id/signin_title"
@@ -28,25 +27,33 @@
             android:textStyle="bold" />
 
         <EditText
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_6sdp"
             android:id="@+id/signin_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_16sdp"
+            android:background="@drawable/background_edittext"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress" />
 
         <EditText
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_6sdp"
             android:id="@+id/signin_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_16sdp"
+            android:background="@drawable/background_edittext"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:autofillHints="password" />
 
         <Button
             android:id="@+id/signin_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_24sdp"
             android:text="@string/sign_in" />
 
@@ -54,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_24sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -68,6 +76,16 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/recoveryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/forgot_password"
+            android:textColor="@color/purple_200"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

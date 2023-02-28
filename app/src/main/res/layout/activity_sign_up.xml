@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpFragment">
+    tools:context=".SignUpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,47 +16,58 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26999998"
-        >
+        app:layout_constraintVertical_bias="0.26999998">
 
         <TextView
             android:id="@+id/signup_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create an account"
+            android:text="@string/create_an_account"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/signup_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_16sdp"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:autofillHints="emailAddress"
+            android:background="@drawable/background_edittext"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_4sdp" />
 
         <EditText
             android:id="@+id/signup_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_16sdp"
-            android:hint="Password"
-            android:inputType="textPassword" />
+            android:autofillHints="emailAddress"
+            android:background="@drawable/background_edittext"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_4sdp" />
 
         <EditText
             android:id="@+id/confirm_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginTop="@dimen/_16sdp"
+            android:autofillHints="password"
+            android:background="@drawable/background_edittext"
             android:hint="@string/confirm_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_4sdp" />
 
         <Button
             android:id="@+id/signup_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_24sdp"
-            android:text="Sign Up" />
+            android:text="@string/sign_up" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:text="Already have an account?"
+                android:text="@string/already_have_an_account"
                 android:textColor="@color/purple_200"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
