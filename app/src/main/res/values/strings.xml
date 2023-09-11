@@ -85,6 +85,7 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="email_label">Email:</string>
     <string name="continue_text">Continue</string>
+    <string name="enter_password">Enter password</string>
 
 
 </resources>

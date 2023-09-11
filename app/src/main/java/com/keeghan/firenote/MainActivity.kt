@@ -1,7 +1,6 @@
 package com.keeghan.firenote
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
@@ -27,7 +26,6 @@ import com.keeghan.firenote.Constants.Companion.NOTE_CLICKED
 import com.keeghan.firenote.databinding.ActivityMainBinding
 import com.keeghan.firenote.model.Note
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
-import kotlin.system.exitProcess
 
 @SuppressLint("NotifyDataSetChanged")
 class MainActivity : AppCompatActivity() {

@@ -15,8 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26999998">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/signup_title"
@@ -38,29 +37,59 @@
             android:paddingStart="@dimen/_6sdp"
             android:paddingEnd="@dimen/_4sdp" />
 
-        <EditText
-            android:id="@+id/signup_password"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_38sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:autofillHints="emailAddress"
-            android:background="@drawable/background_edittext"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_6sdp"
-            android:paddingEnd="@dimen/_4sdp" />
 
-        <EditText
-            android:id="@+id/confirm_password"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signup_password_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_38sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:autofillHints="password"
-            android:background="@drawable/background_edittext"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_6sdp"
-            android:paddingEnd="@dimen/_4sdp" />
+            android:layout_height="wrap_content"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:expandedHintEnabled="false"
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:autofillHints="password"
+                android:background="@drawable/background_edittext"
+                android:hint="@string/enter_password"
+                android:inputType="textPassword"
+                android:paddingStart="@dimen/_6sdp"
+                android:paddingTop="0dp"
+                android:paddingEnd="@dimen/_6sdp"
+                android:paddingBottom="0dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_password_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:expandedHintEnabled="false"
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:autofillHints="password"
+                android:background="@drawable/background_edittext"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:paddingStart="@dimen/_6sdp"
+                android:paddingTop="0dp"
+                android:paddingEnd="@dimen/_6sdp"
+                android:paddingBottom="0dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/signup_button"
