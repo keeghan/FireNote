@@ -1,101 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".SignInActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/signin_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="@string/sign_into_account"
+        android:textSize="@dimen/_20ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.30" />
 
-        <TextView
-            android:id="@+id/signin_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_into_account"
-            android:textSize="@dimen/_20ssp"
-            android:textStyle="bold" />
+    <EditText
+        android:id="@+id/signin_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:autofillHints="emailAddress"
+        android:background="@drawable/background_edittext"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="@dimen/_6sdp"
+        android:paddingEnd="@dimen/_6sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signin_title" />
 
-        <EditText
-            android:id="@+id/signin_email"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/signin_password_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:expandedHintEnabled="false"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@+id/signin_email"
+        app:layout_constraintStart_toStartOf="@+id/signin_email"
+        app:layout_constraintTop_toBottomOf="@+id/signin_email"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signin_password"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_38sdp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
-            android:autofillHints="emailAddress"
+            android:autofillHints="password"
             android:background="@drawable/background_edittext"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword"
             android:paddingStart="@dimen/_6sdp"
-            android:paddingEnd="@dimen/_6sdp" />
+            android:paddingTop="0dp"
+            android:paddingEnd="@dimen/_6sdp"
+            android:paddingBottom="0dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/signin_password_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:expandedHintEnabled="false"
-            app:hintEnabled="false"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signin_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:autofillHints="password"
-                android:background="@drawable/background_edittext"
-                android:hint="@string/enter_password"
-                android:inputType="textPassword"
-                android:paddingStart="@dimen/_6sdp"
-                android:paddingTop="0dp"
-                android:paddingEnd="@dimen/_6sdp"
-                android:paddingBottom="0dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/signin_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginTop="16dp"
+        android:text="@string/sign_in"
+        app:layout_constraintEnd_toEndOf="@+id/signin_email"
+        app:layout_constraintStart_toStartOf="@+id/signin_email"
+        app:layout_constraintTop_toBottomOf="@+id/signin_password_layout" />
 
 
-        <Button
-            android:id="@+id/signin_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_24sdp"
-            android:text="@string/sign_in" />
+    <TextView
+        android:id="@+id/send_to_signUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:text="@string/don_t_have_an_account"
+        android:textColor="@color/purple_200"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/signin_email"
+        app:layout_constraintStart_toStartOf="@+id/signin_email"
+        app:layout_constraintTop_toBottomOf="@+id/signin_button" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_24sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            android:gravity="center"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/send_to_signUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:text="@string/don_t_have_an_account"
-                android:textColor="@color/purple_200"
-                android:textSize="@dimen/_12ssp"
-                android:textStyle="bold" />
+    <TextView
+        android:id="@+id/recoveryBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:text="@string/forgot_password"
+        android:textColor="@color/purple_200"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/signin_email"
+        app:layout_constraintStart_toStartOf="@+id/signin_email"
+        app:layout_constraintTop_toBottomOf="@+id/send_to_signUp" />
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/recoveryBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="@string/forgot_password"
-            android:textColor="@color/purple_200"
-            android:textSize="@dimen/_12ssp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

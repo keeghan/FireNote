@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".SignUpActivity">
 
     <LinearLayout
@@ -108,11 +109,11 @@
             <TextView
                 android:id="@+id/send_to_signin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:clickable="true"
                 android:text="@string/already_have_an_account"
                 android:textColor="@color/purple_200"
-                android:textSize="@dimen/_12ssp"
+                android:textSize="@dimen/_13ssp"
                 android:textStyle="bold" />
 
         </LinearLayout>
