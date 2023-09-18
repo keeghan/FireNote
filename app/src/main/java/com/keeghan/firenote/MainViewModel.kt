@@ -16,39 +16,24 @@ import java.util.Locale
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //fix get note here
-    var database = Firebase.database
+    private var database = Firebase.database
     private val auth = FirebaseAuth.getInstance()
     private val userId = auth.currentUser?.uid
     val noteRef = database.reference.child(userId!!)
     private val myRef = database.getReference(userId!!)
 
 
-    //called by the writingActivity to update
-    fun updateNote(newNote: Note) {
+    //called by the mainActivity to update note or just note color
+    fun updateNote(newNote: Note, color: String = "") {
         val noteObject = mapOf<String, Any>(
-            "color" to newNote.color,
-            "dateTimeString" to newNote.dateTimeString.uppercase(Locale.getDefault()),    //change dateTime to uppercase to avoid errors
+            "color" to if (color == "") newNote.color else color,
+            "dateTimeString" to newNote.dateTimeString.uppercase(Locale.getDefault()),  //change dateTime to uppercase to avoid errors
             "id" to newNote.id,
             "message" to newNote.message,
             "pinStatus" to newNote.pinStatus,
             "title" to newNote.title
         )
-        myRef.child(newNote.id).updateChildren(noteObject)
-    }
-
-    //called by the mainActivity to update color
-    fun updateNote(newNote: Note, color: String) {
-        val noteObject = mapOf<String, Any>(
-            "color" to color,
-            "dateTimeString" to newNote.dateTimeString.uppercase(Locale.getDefault()),
-            "id" to newNote.id,
-            "message" to newNote.message,
-            "pinStatus" to newNote.pinStatus,
-            "title" to newNote.title
-        )
-        myRef.child(newNote.id).updateChildren(noteObject).addOnFailureListener {
-            Toast.makeText(getApplication(), it.message, Toast.LENGTH_SHORT).show()
-        }
+        myRef.child(newNote.id).updateChildren(noteObject).addOnFailureListener {}
     }
 
 
@@ -67,8 +52,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
 
         noteRef.child(note.id).setValue(note).addOnSuccessListener {}.addOnFailureListener {
-                Toast.makeText(getApplication(), "Note not Saved", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(getApplication(), "Note not Saved", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun undoDeleteNote(note: Note) {
+        noteRef.child(note.id).setValue(note)
     }
 
     fun deleteNote(tempNote: Note) {

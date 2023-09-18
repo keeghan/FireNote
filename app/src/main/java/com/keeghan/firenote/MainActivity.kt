@@ -1,6 +1,5 @@
 package com.keeghan.firenote
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
@@ -27,7 +26,6 @@ import com.keeghan.firenote.databinding.ActivityMainBinding
 import com.keeghan.firenote.model.Note
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-@SuppressLint("NotifyDataSetChanged")
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: NoteAdapter
@@ -63,8 +61,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(applicationContext, databaseError.message, Toast.LENGTH_SHORT).show()
             }
         }
+
         viewModel.noteRef.addValueEventListener(eventListener)
 
         binding.fabAddNote.setOnClickListener {
@@ -75,10 +75,11 @@ class MainActivity : AppCompatActivity() {
                 closeActionMode()
             }
         }
-        attachItemTouchHelper()
+        attachItemTouchHelpers()
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         auth = FirebaseAuth.getInstance()
     } //OnCreate
+
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -117,7 +118,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Method to add swipe to delete support
-    private fun attachItemTouchHelper() {
+    //attaches two different itemTouchHelpers to both recyclers
+    private fun attachItemTouchHelpers() {
         //Implementation of swiping to delete
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
@@ -133,13 +135,6 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT -> {
-                        //delete note from realtime database calling delete note from viewModel
-                        //   val tempNote: Note = noteList[viewHolder.absoluteAdapterPosition]
-//                            val tempNote: Note = if (viewHolder == binding.noteRecycler) {
-//                                noteList[viewHolder.absoluteAdapterPosition]
-//                            } else {
-//                                pinnedList[viewHolder.absoluteAdapterPosition]
-//                            }
                         val tempNote: Note = noteList[viewHolder.absoluteAdapterPosition]
                         viewModel.deleteNote(tempNote)
                         adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
@@ -298,9 +293,11 @@ class MainActivity : AppCompatActivity() {
                     mode?.finish()
 
                 }
+
                 R.id.action_choose_color -> {
                     colorDialogFragment.show(supportFragmentManager, "customColorPicker")
                 }
+
                 R.id.action_delete -> {
                     viewModel.deleteNote(longClickNote!!)
                     adapter.notifyDataSetChanged()
@@ -308,6 +305,7 @@ class MainActivity : AppCompatActivity() {
                     mode?.finish()
 
                 }
+
                 R.id.action_send -> { //share note functionality using ShareSheet
                     val sendIntent = Intent().apply {
                         action = Intent.ACTION_SEND
@@ -319,13 +317,14 @@ class MainActivity : AppCompatActivity() {
                     mode?.finish()
 
                 }
+
                 R.id.action_make_a_copy -> {
                     //make a copy of an existing note
                     val duplicateNote = longClickNote!!.copy()
                     viewModel.saveNote(duplicateNote)
                     mode?.finish()
-
                 }
+
                 else -> {
                     return false
                 }
@@ -346,11 +345,14 @@ class MainActivity : AppCompatActivity() {
         actionMode?.finish()
     }
 
+
+    //pass temporary version of recently deleted note to offer undo ability
     fun makeSnackBar(note: Note) {
         Snackbar.make(
             binding.mainCoordinator, "Undo note delete", Snackbar.LENGTH_SHORT
         ).setAction("Undo") {
-            viewModel.database.getReference("note").child(note.id).setValue(note)
+            // viewModel.database.getReference("note").child(note.id).setValue(note)
+            viewModel.undoDeleteNote(note)
             Toast.makeText(applicationContext, "Note Restored", Toast.LENGTH_SHORT).show()
         }.show()
     }

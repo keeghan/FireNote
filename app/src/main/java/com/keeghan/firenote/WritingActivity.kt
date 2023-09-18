@@ -2,8 +2,10 @@ package com.keeghan.firenote
 
 import android.content.res.Configuration
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -39,7 +41,7 @@ class WritingActivity : AppCompatActivity() {
         isNoteUpdate = intent.getBooleanExtra(Constants.INTENT_FLAG_ADD_NOTE, false)
         binding = ActivityWritingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         binding.dateEdited.text =
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("'Edited' MMM-dd"))
 
@@ -104,7 +106,24 @@ class WritingActivity : AppCompatActivity() {
         if (isNoteUpdate) {
             setNoteContent()
         }
+
+
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
     }//End of onCreate
+
+    //Update note or save new Note on back press
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (isNoteUpdate) {
+                updateNote()
+            } else {
+                sendNote()
+            }
+            finish()
+        }
+    }
+
 
     //setWritingActivity content
     private fun setNoteContent() {
@@ -161,25 +180,17 @@ class WritingActivity : AppCompatActivity() {
             note.pinStatus = pinStatus
 
             viewModel.saveNote(note)
+            Toast.makeText(applicationContext, "note saved", Toast.LENGTH_SHORT).show()
         }
-    }
-
-
-    //Inspect whether this is an update even
-    //or newNote send even save note
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if (isNoteUpdate) {
-            updateNote()
-        } else {
-            sendNote()
-        }
-        finish()
     }
 
 
     private fun updateNote() {
-        val note = intent.extras?.get(Constants.NOTE_CLICKED) as Note
+        val note = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(Constants.NOTE_CLICKED, Note::class.java) as Note
+        } else {
+            intent.extras?.get(Constants.NOTE_CLICKED) as Note   //todo: fix deprecation
+        }
         note.color = noteColor
         note.title = binding.noteTitle.text.toString()
         note.message = binding.noteMessage.text.toString()
@@ -201,6 +212,7 @@ class WritingActivity : AppCompatActivity() {
             note.dateTimeString = dateTime
         }
         viewModel.updateNote(note)
+        Toast.makeText(applicationContext, "note updated", Toast.LENGTH_SHORT).show()
     }
 
     private fun showBottomSheetDialog() {
