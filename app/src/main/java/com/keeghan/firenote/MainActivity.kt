@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var eventListener: ValueEventListener
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,17 +51,20 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         colorDialogFragment = ColorPickerFragment.newInstance()
 
-        setClickListener() //implement longClick and onClickListener of adapters
+        //implement longClick and onClickListener of adapters
+        setClickListener()
 
         //Reading notes for database in Arraylist To display in RecyclerView
-        val eventListener: ValueEventListener = object : ValueEventListener {
+        eventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 noteList.clear()
                 pinnedList.clear()
+                binding.progressIndicator.visibility = View.GONE
                 readNotes(dataSnapshot)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                binding.progressIndicator.visibility = View.GONE
                 Toast.makeText(applicationContext, databaseError.message, Toast.LENGTH_SHORT).show()
             }
         }
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 closeActionMode()
             }
         }
-        attachItemTouchHelpers()
+        attachItemTouchHelper()
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         auth = FirebaseAuth.getInstance()
     } //OnCreate
@@ -96,6 +100,7 @@ class MainActivity : AppCompatActivity() {
             }
             setNegativeButton("Log Out") { _, _ ->
                 auth.signOut()
+                viewModel.noteRef.removeEventListener(eventListener)
                 val intent = Intent(this@MainActivity, SignInActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -118,8 +123,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Method to add swipe to delete support
-    //attaches two different itemTouchHelpers to both recyclers
-    private fun attachItemTouchHelpers() {
+    //attaches two different itemTouchHelpers
+    private fun attachItemTouchHelper() {
         //Implementation of swiping to delete
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
@@ -135,6 +140,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT -> {
+
                         val tempNote: Note = noteList[viewHolder.absoluteAdapterPosition]
                         viewModel.deleteNote(tempNote)
                         adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
@@ -208,7 +214,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    //todo: add users to note info
     //getting notes from realtime database and setting them to recycler
     fun readNotes(dataSnapshot: DataSnapshot) {
         for (ds in dataSnapshot.children) {
@@ -230,6 +235,7 @@ class MainActivity : AppCompatActivity() {
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         adapter.setNoteList(noteList)
 
+        //Show pinned recycler and titles if only there are pinned notes
         if (pinnedList.isNotEmpty()) {
             binding.pinnedRecycler.visibility = View.VISIBLE
             binding.pinnedTitle.visibility = View.VISIBLE
@@ -243,9 +249,12 @@ class MainActivity : AppCompatActivity() {
             binding.pinnedTitle.visibility = View.GONE
             binding.othersTitle.visibility = View.GONE
         }
-
-        //TODO: display message if there's no note
-
+        //display message if there are no notes
+        if (noteList.isEmpty() && pinnedList.isEmpty()) {
+            binding.noNotesTxt.visibility = View.VISIBLE
+        } else {
+            binding.noNotesTxt.visibility = View.INVISIBLE
+        }
     }
 
 
@@ -323,6 +332,7 @@ class MainActivity : AppCompatActivity() {
                     val duplicateNote = longClickNote!!.copy()
                     viewModel.saveNote(duplicateNote)
                     mode?.finish()
+
                 }
 
                 else -> {
@@ -345,13 +355,10 @@ class MainActivity : AppCompatActivity() {
         actionMode?.finish()
     }
 
-
-    //pass temporary version of recently deleted note to offer undo ability
     fun makeSnackBar(note: Note) {
         Snackbar.make(
             binding.mainCoordinator, "Undo note delete", Snackbar.LENGTH_SHORT
         ).setAction("Undo") {
-            // viewModel.database.getReference("note").child(note.id).setValue(note)
             viewModel.undoDeleteNote(note)
             Toast.makeText(applicationContext, "Note Restored", Toast.LENGTH_SHORT).show()
         }.show()

@@ -45,11 +45,13 @@ class SignInActivity : AppCompatActivity() {
         binding.signinButton.setOnClickListener {
             closeKeyboard(baseContext, it)
             if (validateSignInForm()) {
+                binding.progressIndicator.visibility = View.VISIBLE
                 auth.signInWithEmailAndPassword(
                     binding.signinEmail.text.toString().trim(),
                     binding.signinPassword.text.toString().trim()
                 ).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
+                        binding.progressIndicator.visibility = View.INVISIBLE
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("TAG122", "signInWithEmail:success")
                         // val user = auth.currentUser
@@ -57,6 +59,7 @@ class SignInActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
+                        binding.progressIndicator.visibility = View.INVISIBLE
                         // If sign in fails, display a message to the user.
                         Log.w("TAG124", "signInWithEmail:failure", task.exception)
                         Toast.makeText(
