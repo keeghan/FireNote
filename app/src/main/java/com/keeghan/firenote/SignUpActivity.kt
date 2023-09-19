@@ -31,19 +31,20 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.signupButton.setOnClickListener {
             if (validateSignUpForm()) {
+                binding.progressIndicator.visibility = View.VISIBLE
                 auth.createUserWithEmailAndPassword(
                     binding.signupEmail.text.toString().trim(),
                     binding.signupPassword.text.toString().trim()
                 ).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d("TAG123", "createUserWithEmail:success")
+                        binding.progressIndicator.visibility = View.INVISIBLE
                         // val user = auth.currentUser
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
+                        binding.progressIndicator.visibility = View.INVISIBLE
                         // If sign in fails, display a message to the user.
-                        Log.w("TAG120", "createUserWithEmail:failure", task.exception)
                         Toast.makeText(
                             baseContext,
                             task.exception?.localizedMessage ?: "Authentication failed.",

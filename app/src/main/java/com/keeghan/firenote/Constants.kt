@@ -1,5 +1,7 @@
 package com.keeghan.firenote
 
+import com.keeghan.firenote.model.Note
+
 class Constants {
     companion object {
 
@@ -25,5 +27,18 @@ class Constants {
 
         const val INTENT_FLAG_ADD_NOTE = "MainActivity.IntentFlag.UpdateNote"
         const val NOTE_CLICKED = "MainActivity.NOTE_CLICKED"
+    }
+}
+
+//Note comparator
+object NoteComparator : Comparator<Note> {
+    override fun compare(note1: Note, note2: Note): Int {
+        if (note1.id != note2.id) return note1.id.compareTo(note2.id)
+        if (note1.title != note2.title) return note1.title.compareTo(note2.title)
+        if (note1.message != note2.message) return note1.message.compareTo(note2.message)
+        if (note1.color != note2.color) return note1.color.compareTo(note2.color)
+        if (note1.pinStatus != note2.pinStatus) return note1.pinStatus.compareTo(note2.pinStatus)
+        if (note1.dateTimeString != note2.dateTimeString) return note1.dateTimeString.compareTo(note2.dateTimeString)
+        return 0 // All properties are the same
     }
 }

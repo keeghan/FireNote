@@ -37,6 +37,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    //Save a new note by assigning it a new id and createdTime
     fun saveNote(note: Note) {
         //Convert ZoneDateTime as String
         note.dateTimeString = ZonedDateTime.now(ZoneId.systemDefault()).format(
