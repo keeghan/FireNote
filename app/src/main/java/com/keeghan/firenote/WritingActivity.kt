@@ -14,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.keeghan.firenote.databinding.ActivityWritingBinding
 import com.keeghan.firenote.databinding.ColorMenuLayoutBinding
 import com.keeghan.firenote.model.Note
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -136,33 +137,25 @@ class WritingActivity : AppCompatActivity() {
             )
         )
 
-
-        //Check last time note was edited and format edited time
-        val timeNow = ZonedDateTime.now()
-        if (timeNow.isBefore(dateTime.plusDays(1))) {
-            displayTime(dateTime, Constants.EDITED_PATTERN_NOW)
-        }
-        //todo: solve problems
-        if (timeNow.isAfter(dateTime.plusDays(2))) {
-            displayTime(dateTime, Constants.EDITED_PATTERN_MONTH)
-        }
-        if (timeNow.isAfter(dateTime.plusMonths(1))) {
-            displayTime(dateTime, Constants.EDITED_PATTERN_MONTH)
-        }
-        if (timeNow.isAfter(dateTime.plusYears(1))) {
-            displayTime(dateTime, Constants.EDITED_PATTERN_YEAR)
+        //update last Edited
+        binding.dateEdited.text = buildString {
+            append(getString(R.string.edited))
+            append(formatDateTime(dateTime))
         }
     }
 
-
-    //display edited time
-    private fun displayTime(dateTime: ZonedDateTime, pattern: String) {
-        val editedTime = "Edited " + dateTime.format(
-            DateTimeFormatter.ofPattern(pattern)
-        )
-        binding.dateEdited.text = editedTime
+    //Format date according to how the last time the note was edited
+    fun formatDateTime(dateTime: ZonedDateTime): String {
+        val now = ZonedDateTime.now()
+        val duration = Duration.between(dateTime, now).abs()
+        return when {
+            duration.toDays() >= 365 -> dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+            duration.toDays() >= 30 -> dateTime.format(DateTimeFormatter.ofPattern("dd MMM"))
+            duration.toDays() >= 1 -> "${duration.toDays()}d"
+            duration.toHours() >= 1 -> "${duration.toHours()}h"
+            else -> "${duration.toMinutes()}m"
+        }
     }
-
 
     //validate Note, create note and upload a New Note to Realtime Database
     private fun sendNote() {

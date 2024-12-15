@@ -87,6 +87,7 @@
     <string name="continue_text">Continue</string>
     <string name="enter_password">Enter password</string>
     <string name="no_note_string">You don\'t have any notes</string>
+    <string name="edited">"Edited: "</string>
 
 
 </resources>
